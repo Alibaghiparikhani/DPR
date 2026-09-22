@@ -1,0 +1,23 @@
+{
+  "python": "3.12.14",
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.39",
+  "fixture": "Independent scalar roots; no payloads; all slots initially free",
+  "measurements": [
+    {
+      "tasks": 1000,
+      "workers": 3,
+      "repeats": 5,
+      "preprocess_median_seconds": 0.004523327000242716,
+      "schedule_median_seconds": 0.03110311399996135,
+      "exact_descendant_counts": true
+    },
+    {
+      "tasks": 5000,
+      "workers": 3,
+      "repeats": 5,
+      "preprocess_median_seconds": 0.028044666000369034,
+      "schedule_median_seconds": 0.20518254299986438,
+      "exact_descendant_counts": true
+    }
+  ]
+}

@@ -1,0 +1,604 @@
+{
+  "python": "3.12.14",
+  "platform": "Linux-6.18.35-x86_64-with-glibc2.39",
+  "repeats": 5,
+  "method": "one warmup; gc.collect before each timed analyze_source; median",
+  "benchmarks": {
+    "chain_1000": {
+      "median_seconds": 0.07538611200016021,
+      "samples_seconds": [
+        0.07793005000030462,
+        0.07352651500013963,
+        0.07305713699997796,
+        0.07538611200016021,
+        0.08058008699981656
+      ],
+      "tasks": 1000,
+      "values": 1000,
+      "edge_pairs": 999
+    },
+    "chain_5000": {
+      "median_seconds": 0.42311582999991515,
+      "samples_seconds": [
+        0.43658859200013467,
+        0.41725213900008384,
+        0.43430510000007416,
+        0.4139396659998056,
+        0.42311582999991515
+      ],
+      "tasks": 5000,
+      "values": 5000,
+      "edge_pairs": 4999
+    },
+    "chain_10000": {
+      "median_seconds": 0.9528515039996819,
+      "samples_seconds": [
+        0.9528515039996819,
+        0.9314819050000551,
+        0.9565079179997156,
+        0.8995023679999576,
+        1.0259495509999397
+      ],
+      "tasks": 10000,
+      "values": 10000,
+      "edge_pairs": 9999
+    },
+    "comprehensions_500": {
+      "median_seconds": 0.13628640799970526,
+      "samples_seconds": [
+        0.15111725099995965,
+        0.1393614339999658,
+        0.13628640799970526,
+        0.13265874199987593,
+        0.13065557500021896
+      ],
+      "tasks": 1500,
+      "values": 1502,
+      "edge_pairs": 1000
+    },
+    "objects_500": {
+      "median_seconds": 0.165610227000343,
+      "samples_seconds": [
+        0.17276653999988412,
+        0.165610227000343,
+        0.1644202210000003,
+        0.17027680099999998,
+        0.16385028300010163
+      ],
+      "tasks": 2000,
+      "values": 2501,
+      "edge_pairs": 2500
+    }
+  },
+  "examples": {
+    "container_reads": {
+      "source": "a=(10,20)\nb=(30,40)\nx=a[1]\ny=b[0]\nresult=x+y\n",
+      "metrics": {
+        "tasks": 5,
+        "values": 5,
+        "edge_pairs": 4,
+        "certain_tasks": 5,
+        "conservative_tasks": 0,
+        "edges_by_kind": {
+          "data": 4,
+          "state": 0,
+          "order": 0
+        },
+        "opaque_regions": 0,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 5,
+        "max_generation_width": 2
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "a=(10,20)",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "b=(30,40)",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000003",
+          "source": "x=a[1]",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000004",
+          "source": "y=b[0]",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000005",
+          "source": "result=x+y",
+          "certainty": "certain",
+          "dependencies": [
+            "T000003",
+            "T000004"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "comprehension_branches": {
+      "source": "def clean(values): return [x*2 for x in values]\ndef adjust(values): return [x+1 for x in values]\na=[1,2]\nb=[3,4]\nx=clean(a)\ny=adjust(b)\nresult=sum(x)+sum(y)\n",
+      "metrics": {
+        "tasks": 5,
+        "values": 8,
+        "edge_pairs": 4,
+        "certain_tasks": 5,
+        "conservative_tasks": 0,
+        "edges_by_kind": {
+          "data": 4,
+          "state": 0,
+          "order": 0
+        },
+        "opaque_regions": 0,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 5,
+        "max_generation_width": 2
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "a=[1,2]",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "b=[3,4]",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000003",
+          "source": "x=clean(a)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000004",
+          "source": "y=adjust(b)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000005",
+          "source": "result=sum(x)+sum(y)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000003",
+            "T000004"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "object_local": {
+      "source": "a=[1,2]\nalias=a\nb=[4,5]\nx=sum(a)\nu=sum(b)\na.append(3)\ny=sum(alias)\nv=sum(b)\n",
+      "metrics": {
+        "tasks": 7,
+        "values": 10,
+        "edge_pairs": 7,
+        "certain_tasks": 7,
+        "conservative_tasks": 0,
+        "edges_by_kind": {
+          "data": 5,
+          "state": 2,
+          "order": 0
+        },
+        "opaque_regions": 0,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 6,
+        "max_generation_width": 3
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "a=[1,2]",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "b=[4,5]",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000003",
+          "source": "x=sum(a)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000004",
+          "source": "u=sum(b)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000005",
+          "source": "a.append(3)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001",
+            "T000003"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000006",
+          "source": "y=sum(alias)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001",
+            "T000005"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000007",
+          "source": "v=sum(b)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "reflection_recovery": {
+      "source": "a=1\nb=2\ngetattr(obj,name)\n1+2\n3*4\n",
+      "metrics": {
+        "tasks": 5,
+        "values": 11,
+        "edge_pairs": 4,
+        "certain_tasks": 4,
+        "conservative_tasks": 1,
+        "edges_by_kind": {
+          "data": 0,
+          "state": 2,
+          "order": 2
+        },
+        "opaque_regions": 0,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 4,
+        "max_generation_width": 2
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "a=1",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "b=2",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000003",
+          "source": "getattr(obj,name)",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000001",
+            "T000002"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000004",
+          "source": "1+2",
+          "certainty": "certain",
+          "dependencies": [
+            "T000003"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000005",
+          "source": "3*4",
+          "certainty": "certain",
+          "dependencies": [
+            "T000003"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "exception_recovery": {
+      "source": "def f(x): return x+1\nn=2\nq=10//n\na=f(2)\nb=f(3)\nresult=a+b\n",
+      "metrics": {
+        "tasks": 5,
+        "values": 7,
+        "edge_pairs": 5,
+        "certain_tasks": 4,
+        "conservative_tasks": 1,
+        "edges_by_kind": {
+          "data": 3,
+          "state": 2,
+          "order": 1
+        },
+        "opaque_regions": 0,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 4,
+        "max_generation_width": 2
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "n=2",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "q=10//n",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000003",
+          "source": "a=f(2)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000004",
+          "source": "b=f(3)",
+          "certainty": "certain",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000005",
+          "source": "result=a+b",
+          "certainty": "certain",
+          "dependencies": [
+            "T000003",
+            "T000004"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "ordinary_import": {
+      "source": "import math\n1+2\n3*4\n",
+      "metrics": {
+        "tasks": 3,
+        "values": 4,
+        "edge_pairs": 2,
+        "certain_tasks": 2,
+        "conservative_tasks": 1,
+        "edges_by_kind": {
+          "data": 0,
+          "state": 2,
+          "order": 0
+        },
+        "opaque_regions": 1,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 2,
+        "max_generation_width": 2
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "import math",
+          "certainty": "conservative",
+          "dependencies": [],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000002",
+          "source": "1+2",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000003",
+          "source": "3*4",
+          "certainty": "certain",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "isolated_candidate"
+        }
+      ]
+    },
+    "import_named_guard": {
+      "source": "import math\ndef f(): return 1\na=f()\nb=f()\n",
+      "metrics": {
+        "tasks": 4,
+        "values": 12,
+        "edge_pairs": 3,
+        "certain_tasks": 0,
+        "conservative_tasks": 4,
+        "edges_by_kind": {
+          "data": 0,
+          "state": 3,
+          "order": 3
+        },
+        "opaque_regions": 4,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 0,
+        "max_generation_width": 1
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "import math",
+          "certainty": "conservative",
+          "dependencies": [],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000002",
+          "source": "def f(): return 1",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000003",
+          "source": "a=f()",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000004",
+          "source": "b=f()",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000003"
+          ],
+          "placement": "shared_namespace"
+        }
+      ]
+    },
+    "unknown_named_guard": {
+      "source": "unknown()\na=1\nb=2\n",
+      "metrics": {
+        "tasks": 3,
+        "values": 8,
+        "edge_pairs": 2,
+        "certain_tasks": 0,
+        "conservative_tasks": 3,
+        "edges_by_kind": {
+          "data": 0,
+          "state": 2,
+          "order": 2
+        },
+        "opaque_regions": 2,
+        "whole_tail_collapses": 0,
+        "hidden_statements": 0,
+        "isolated_candidates": 0,
+        "max_generation_width": 1
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "unknown()",
+          "certainty": "conservative",
+          "dependencies": [],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000002",
+          "source": "a=1",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "shared_namespace"
+        },
+        {
+          "id": "T000003",
+          "source": "b=2",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000002"
+          ],
+          "placement": "shared_namespace"
+        }
+      ]
+    },
+    "namespace_escape": {
+      "source": "a=1\ng=globals()\nx=2\ny=3\n",
+      "metrics": {
+        "tasks": 2,
+        "values": 7,
+        "edge_pairs": 1,
+        "certain_tasks": 1,
+        "conservative_tasks": 1,
+        "edges_by_kind": {
+          "data": 0,
+          "state": 0,
+          "order": 1
+        },
+        "opaque_regions": 1,
+        "whole_tail_collapses": 1,
+        "hidden_statements": 2,
+        "isolated_candidates": 1,
+        "max_generation_width": 1
+      },
+      "tasks": [
+        {
+          "id": "T000001",
+          "source": "a=1",
+          "certainty": "certain",
+          "dependencies": [],
+          "placement": "isolated_candidate"
+        },
+        {
+          "id": "T000002",
+          "source": "g=globals()\nx=2\ny=3",
+          "certainty": "conservative",
+          "dependencies": [
+            "T000001"
+          ],
+          "placement": "shared_namespace"
+        }
+      ]
+    }
+  }
+}
